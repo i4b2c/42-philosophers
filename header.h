@@ -13,6 +13,7 @@ typedef struct d_mutex
 {
 	int *num;
 	pthread_mutex_t *mutex;
+	pthread_t thread;
 }	t_mutex;
 
 #endif
