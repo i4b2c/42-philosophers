@@ -70,13 +70,6 @@ int main(int ac, char **av)
 		iniciar_mutex(temp->mutex,&i,&mutex);
 		temp->next = NULL;
 		adicionar_na_lista(&geral,temp,&ultimo);
-		/*if (geral == NULL) {
-            geral = temp;
-            ultimo = geral;
-        } else {
-            ultimo->next = temp;
-            ultimo = temp;
-        }*/
 		pthread_create(&(temp->mutex->thread),NULL
 			,&teste,temp->mutex);
 		num--;
