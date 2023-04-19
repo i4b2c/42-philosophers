@@ -11,9 +11,18 @@
 
 typedef struct d_mutex
 {
-	int *num;
+	int *dormir;
+	int *pensar;
+	int philosopher;
+	int morte;
 	pthread_mutex_t *mutex;
 	pthread_t thread;
 }	t_mutex;
+
+typedef struct d_geral
+{
+	t_mutex *mutex;
+	struct d_geral *next;
+}	t_geral;
 
 #endif
