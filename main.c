@@ -1,33 +1,29 @@
 #include "header.h"
 
-void iniciar_mutex(t_mutex *temp, pthread_mutex_t *mutex)
+void iniciar_mutex(t_geral *temp)
 {
-	temp->mutex = mutex;
+	pthread_mutex_t mutex;
+	temp->mutex->mutex = mutex;
+	pthread_mutex_init(&(temp->mutex->mutex),NULL);
 }
 
 void *teste(void *arg)
 {
 	int i;
-	int *pensar;
-	int *dormir;
-	int philosophe;
 	t_mutex *temp;
-	pthread_mutex_t *mutex;
+	pthread_mutex_t mutex;
 
-	temp = (t_mutex *)arg;
 	i = 0;
+	temp = (t_mutex *)arg;
 	mutex = temp->mutex;
-	pensar = temp->pensar;
-	dormir = temp->dormir;
-	philosophe = temp->philosopher;
-	if(dormir < pensar)
+	if(temp->time_to_eat < temp->time_to_sleep)
 	{	
 		while(1)
 		{
 			//pthread_mutex_lock(mutex);
-			printf("philosopho %d esta a dormir\n"
-				,philosophe);
-			usleep(*dormir);
+			printf("philosopho %d esta a comer\n"
+				,temp->id_philosopher);
+			usleep(temp->time_to_eat);
 			//pthread_mutex_unlock(mutex);
 		}
 	}
@@ -36,9 +32,9 @@ void *teste(void *arg)
 		while(1)
 		{
 			//pthread_mutex_lock(mutex);
-			printf("philosopho %d esta a pensar\n"
-				,philosophe);
-			usleep(*pensar);
+			printf("philosopho %d esta a dormir\n"
+				,temp->id_philosopher);
+			usleep(temp->time_to_sleep);
 			//pthread_mutex_unlock(mutex);
 		}
 	}
@@ -59,54 +55,60 @@ void adicionar_na_lista(t_geral **g,t_geral *t,t_geral **u)
 	}
 }
 
+void join_threads(t_geral **geral)
+{
+	t_geral *temp;
+
+	temp = *geral;
+	while(temp != NULL)
+	{
+		pthread_join(temp->mutex->thread,NULL);
+		temp = temp->next;
+	}
+}
+
+void destroy_all_mutex(t_geral **geral)
+{
+	t_geral *temp;
+
+	temp = *geral;
+	while(temp != NULL)
+	{
+		pthread_mutex_destroy(&(temp->mutex->mutex));
+		temp = temp->next;
+	}
+}
+
 int main(int ac, char **av)
 {
 	int num;
 	int i;
-	pthread_mutex_t mutex;
 	t_geral *geral;
 	t_geral *temp;
 	t_geral *ultimo;
-	int dormir;
-	int pensar;
-	int morte;
 	geral = NULL;
 	ultimo = NULL;
-
 	if(ac != 5)
 		return 0;
 	num = atoi(av[1]);
-	dormir = atoi(av[2]);
-	pensar = atoi(av[3]);
-	morte = atoi(av[4]);
-	pthread_mutex_init(&mutex,NULL);
 	i = 1;
 	//isso vai criar as threads e o mutex para cada threads
-	while(num > 0)
+	while(i <= num)
 	{
 		temp = malloc(sizeof(t_geral));
 		temp->mutex = malloc(sizeof(t_mutex));
-		temp->mutex->dormir = &dormir;
-		temp->mutex->pensar = &pensar;
-		temp->mutex->morte = morte;
-		temp->mutex->philosopher = i;
-		iniciar_mutex(temp->mutex,&mutex);
+		temp->mutex->time_to_die = atoi(av[2]);
+		temp->mutex->time_to_eat = atoi(av[3]);
+		temp->mutex->time_to_sleep = atoi(av[4]);
+		temp->mutex->id_philosopher = i;
+		iniciar_mutex(temp);
 		temp->next = NULL;
 		adicionar_na_lista(&geral,temp,&ultimo);
 		pthread_create(&(temp->mutex->thread),NULL
 			,&teste,temp->mutex);
 		i++;
-		num--;
-
 	}
-	ultimo = geral;
-	//vai dar join em cada thread
-	while(ultimo != NULL)
-	{
-		pthread_join(ultimo->mutex->thread,NULL);
-		ultimo = ultimo->next;
-	}
-	//destruir o mutex que eu criei
-	pthread_mutex_destroy(&mutex);
+	join_threads(&geral);
+	destroy_all_mutex(&geral);
 	return 0;
 }

@@ -11,11 +11,11 @@
 
 typedef struct d_mutex
 {
-	int *dormir;
-	int *pensar;
-	int philosopher;
-	int morte;
-	pthread_mutex_t *mutex;
+	int time_to_sleep;
+	int time_to_die;
+	int time_to_eat;
+	int id_philosopher;
+	pthread_mutex_t mutex;
 	pthread_t thread;
 }	t_mutex;
 
