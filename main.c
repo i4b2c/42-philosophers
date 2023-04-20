@@ -11,50 +11,75 @@ long int calculo(struct timeval time_start, struct timeval time_end)
 {
 	long int temp;
 
-	//ta a funcionar o contador em milisegundos
 	temp = ((time_end.tv_sec * 1000 + time_end.tv_usec / 1000) -
     		(time_start.tv_sec * 1000 + time_start.tv_usec / 1000));
 	return temp;
 }
 
+void pensar(t_mutex *temp,struct timeval time_start,struct timeval time_end)
+{
+	long int num_temp;
+
+	gettimeofday(&time_end,NULL);
+	num_temp = calculo(time_start,time_end);
+	printf("%ld the %d is thinking\n"
+		,num_temp,temp->id_philosopher);
+	usleep(rand() % 400*1000);
+}
+
+void comer(t_mutex *temp,struct timeval time_start,struct timeval time_end)
+{
+	long int num_temp;
+
+	gettimeofday(&time_end,NULL);
+	num_temp = calculo(time_start,time_end);
+	pthread_mutex_lock(&(temp->mutex));
+	printf("%ld the %d is eating\n"
+		,num_temp,temp->id_philosopher);
+	temp->time_to_die = temp->time_to_die_reset;
+	pthread_mutex_unlock(&(temp->mutex));
+	usleep(rand() % temp->time_to_eat*1000);
+}
+
+void dormir(t_mutex *temp,struct timeval time_start,struct timeval time_end)
+{
+	int long num_temp;
+
+	gettimeofday(&time_end,NULL);
+	num_temp = calculo(time_start,time_end);
+	printf("%ld the %d is sleeping\n"
+		,num_temp,temp->id_philosopher);
+	temp->time_to_die -= temp->time_to_sleep;
+	usleep(rand() % temp->time_to_sleep*1000);
+}
+
+void morreu_philosopher(t_mutex *temp)
+{
+	printf("the %d is died\n",temp->id_philosopher);
+	pthread_exit(NULL);
+	exit (0);
+}
+
 void *teste(void *arg)
 {
 	int i;
-	struct timeval time_end;
 	struct timeval time_start;
+	struct timeval time_end;
 	long int num;
 	t_mutex *temp;
-	pthread_mutex_t mutex;
 
 	i = 0;
 	temp = (t_mutex *)arg;
-	mutex = temp->mutex;
+	usleep(10);
 	gettimeofday(&time_start,NULL);
-	if(temp->time_to_eat < temp->time_to_sleep)
-	{	
-		while(1)
-		{
-			//pthread_mutex_lock(mutex);
-			gettimeofday(&time_end,NULL);
-			printf("%ld philosopho %d esta a comer\n"
-				,calculo(time_start,time_end)
-				,temp->id_philosopher);
-			usleep(temp->time_to_eat);
-			//pthread_mutex_unlock(mutex);
-		}
-	}
-	else
+	gettimeofday(&time_end,NULL);
+	while(1)
 	{
-		while(1)
-		{
-			//pthread_mutex_lock(mutex);
-			gettimeofday(&time_end,NULL);
-			printf("%ld philosopho %d esta a dormir\n"
-				,calculo(time_start,time_end)
-				,temp->id_philosopher);
-			usleep(temp->time_to_sleep);
-			//pthread_mutex_unlock(mutex);
-		}
+		pensar(temp,time_start,time_end);
+		comer(temp,time_start,time_end);
+		dormir(temp,time_start,time_end);
+		if(temp->time_to_die <= 0)
+			morreu_philosopher(temp);
 	}
 	pthread_exit(NULL);
 }
@@ -104,35 +129,43 @@ void exit_erro(void)
 	exit (0);
 }
 
-int main(int ac, char **av)
+void create_threads(t_geral **geral, int num,char **av)
 {
-	int num;
 	int i;
-	t_geral *geral;
 	t_geral *temp;
 	t_geral *ultimo;
-	geral = NULL;
+
 	ultimo = NULL;
-	if(ac != 5)
-		exit_erro();
-	num = atoi(av[1]);
 	i = 1;
-	//isso vai criar as threads e o mutex para cada threads
 	while(i <= num)
 	{
 		temp = malloc(sizeof(t_geral));
 		temp->mutex = malloc(sizeof(t_mutex));
 		temp->mutex->time_to_die = atoi(av[2]);
+		temp->mutex->time_to_die_reset = atoi(av[2]);
 		temp->mutex->time_to_eat = atoi(av[3]);
 		temp->mutex->time_to_sleep = atoi(av[4]);
 		temp->mutex->id_philosopher = i;
 		iniciar_mutex(temp);
 		temp->next = NULL;
-		adicionar_na_lista(&geral,temp,&ultimo);
+		adicionar_na_lista(geral,temp,&ultimo);
 		pthread_create(&(temp->mutex->thread),NULL
 			,&teste,temp->mutex);
 		i++;
 	}
+}
+
+int main(int ac, char **av)
+{
+	int num;
+	t_geral *geral;
+
+	srand(time(NULL));
+	geral = NULL;
+	if(ac != 5)
+		exit_erro();
+	num = atoi(av[1]);
+	create_threads(&geral,num,av);
 	join_threads(&geral);
 	destroy_all_mutex(&geral);
 	return 0;

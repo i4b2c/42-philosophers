@@ -16,6 +16,7 @@ typedef struct d_mutex
 	int time_to_die;
 	int time_to_eat;
 	int id_philosopher;
+	int time_to_die_reset;
 	pthread_mutex_t mutex;
 	pthread_t thread;
 }	t_mutex;
