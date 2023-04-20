@@ -1,2 +1,2 @@
 all:
-	cc main.c -lpthread
+	cc main.c -lpthread -o philo

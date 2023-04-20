@@ -7,21 +7,37 @@ void iniciar_mutex(t_geral *temp)
 	pthread_mutex_init(&(temp->mutex->mutex),NULL);
 }
 
+long int calculo(struct timeval time_start, struct timeval time_end)
+{
+	long int temp;
+
+	//ta a funcionar o contador em milisegundos
+	temp = ((time_end.tv_sec * 1000 + time_end.tv_usec / 1000) -
+    		(time_start.tv_sec * 1000 + time_start.tv_usec / 1000));
+	return temp;
+}
+
 void *teste(void *arg)
 {
 	int i;
+	struct timeval time_end;
+	struct timeval time_start;
+	long int num;
 	t_mutex *temp;
 	pthread_mutex_t mutex;
 
 	i = 0;
 	temp = (t_mutex *)arg;
 	mutex = temp->mutex;
+	gettimeofday(&time_start,NULL);
 	if(temp->time_to_eat < temp->time_to_sleep)
 	{	
 		while(1)
 		{
 			//pthread_mutex_lock(mutex);
-			printf("philosopho %d esta a comer\n"
+			gettimeofday(&time_end,NULL);
+			printf("%ld philosopho %d esta a comer\n"
+				,calculo(time_start,time_end)
 				,temp->id_philosopher);
 			usleep(temp->time_to_eat);
 			//pthread_mutex_unlock(mutex);
@@ -32,7 +48,9 @@ void *teste(void *arg)
 		while(1)
 		{
 			//pthread_mutex_lock(mutex);
-			printf("philosopho %d esta a dormir\n"
+			gettimeofday(&time_end,NULL);
+			printf("%ld philosopho %d esta a dormir\n"
+				,calculo(time_start,time_end)
 				,temp->id_philosopher);
 			usleep(temp->time_to_sleep);
 			//pthread_mutex_unlock(mutex);
@@ -79,6 +97,13 @@ void destroy_all_mutex(t_geral **geral)
 	}
 }
 
+void exit_erro(void)
+{
+	printf("./philo number_of_philosophers ");
+	printf("time_to_die time_to_eat time_to_sleep\n");
+	exit (0);
+}
+
 int main(int ac, char **av)
 {
 	int num;
@@ -89,7 +114,7 @@ int main(int ac, char **av)
 	geral = NULL;
 	ultimo = NULL;
 	if(ac != 5)
-		return 0;
+		exit_erro();
 	num = atoi(av[1]);
 	i = 1;
 	//isso vai criar as threads e o mutex para cada threads
