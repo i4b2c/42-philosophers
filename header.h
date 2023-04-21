@@ -29,4 +29,6 @@ typedef struct d_geral
 	struct d_geral *next;
 }	t_geral;
 
+long int calculo(struct timeval time_start, struct timeval time_end);
+
 #endif

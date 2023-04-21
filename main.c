@@ -35,24 +35,41 @@ void comer(t_mutex *temp,t_mutex *mutex
 	,struct timeval time_start)
 {
 	long int num_temp;
+	long int i;
 	struct timeval time_end;
+	struct timeval teste1;
+	struct timeval teste3;
 
-	gettimeofday(&time_end,NULL);
+	gettimeofday(&teste1,NULL);
 	num_temp = calculo(time_start,time_end);
 	pthread_mutex_lock(&(temp->mutex));
 	pthread_mutex_lock(&(mutex->mutex));
-	printf("%ld the %d is eating\n"
+	gettimeofday(&teste3,NULL);
+	i = calculo(teste1,teste3);
+	gettimeofday(&time_end,NULL);
+	num_temp = calculo(time_start,time_end);
+	if(i)
+	{
+		printf("%ld %d is thinking\n"
+			,num_temp,temp->id_philosopher);
+		usleep(i*1000);
+		temp->time_to_die -= i;
+		//if(check_morte(temp->time_to_die,num_temp));
+		//	morreu_philosopher(temp);
+	}
+	if(temp->time_to_die < 0)
+		morreu_philosopher(temp);
+	gettimeofday(&time_end,NULL);
+	num_temp = calculo(time_start,time_end);
+	printf("%ld %d is eating\n"
 		,num_temp,temp->id_philosopher);
-	temp->time_to_die -= temp->time_to_sleep;
-	//if(temp->time_to_die <= 0)
-	//	morreu_philosopher(temp);
-	temp->time_to_die = temp->time_to_die_reset;
+	//temp->time_to_die -= temp->time_to_sleep;
+	temp->time_to_die += temp->time_to_eat;
+	usleep(temp->time_to_eat*1000);
 	pthread_mutex_unlock(&(temp->mutex));
 	pthread_mutex_unlock(&(mutex->mutex));
 	if(temp->time_to_die <= 0)
 		morreu_philosopher(temp);
-	//rand esta apenas para eu tester uma coisa
-	usleep(rand () % temp->time_to_eat*1000);
 }
 
 void dormir(t_mutex *temp,struct timeval time_start)
@@ -62,16 +79,18 @@ void dormir(t_mutex *temp,struct timeval time_start)
 
 	gettimeofday(&time_end,NULL);
 	num_temp = calculo(time_start,time_end);
-	printf("%ld the %d is sleeping\n"
+	printf("%ld %d is sleeping\n"
 		,num_temp,temp->id_philosopher);
 	temp->time_to_die -= temp->time_to_sleep;
 	//rand esta apenas para eu tester uma coisa
-	usleep(rand () % temp->time_to_sleep*1000);
+	usleep(temp->time_to_sleep*1000);
+	if(temp->time_to_die < 0)
+		morreu_philosopher(temp);
 }
 
 void morreu_philosopher(t_mutex *temp)
 {
-	printf("the %d is died\n",temp->id_philosopher);
+	printf("%d is died\n",temp->id_philosopher);
 	pthread_exit(NULL);
 	exit (0);
 }
@@ -91,7 +110,7 @@ void *teste(void *arg)
 	{
 		if(temp->mutex->time_to_die <= 0)
 			morreu_philosopher(temp->mutex);
-		pensar(temp->mutex,time_start);
+		//pensar(temp->mutex,time_start);
 		if(temp->mutex->id_philosopher < temp->mutex->max)
 			comer(temp->mutex
 			,temp->next->mutex,time_start);
