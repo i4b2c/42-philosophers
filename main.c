@@ -57,8 +57,8 @@ void comer(t_mutex *temp,t_mutex *mutex
 		//if(check_morte(temp->time_to_die,num_temp));
 		//	morreu_philosopher(temp);
 	}
-	if(temp->time_to_die < 0)
-		morreu_philosopher(temp);
+	//if(temp->time_to_die < 0)
+	//	morreu_philosopher(temp);
 	gettimeofday(&time_end,NULL);
 	num_temp = calculo(time_start,time_end);
 	printf("%ld %d is eating\n"
@@ -68,8 +68,8 @@ void comer(t_mutex *temp,t_mutex *mutex
 	usleep(temp->time_to_eat*1000);
 	pthread_mutex_unlock(&(temp->mutex));
 	pthread_mutex_unlock(&(mutex->mutex));
-	if(temp->time_to_die <= 0)
-		morreu_philosopher(temp);
+	//if(temp->time_to_die <= 0)
+	//	morreu_philosopher(temp);
 }
 
 void dormir(t_mutex *temp,struct timeval time_start)
@@ -84,15 +84,17 @@ void dormir(t_mutex *temp,struct timeval time_start)
 	temp->time_to_die -= temp->time_to_sleep;
 	//rand esta apenas para eu tester uma coisa
 	usleep(temp->time_to_sleep*1000);
-	if(temp->time_to_die < 0)
-		morreu_philosopher(temp);
+	//if(temp->time_to_die < 0)
+	//	morreu_philosopher(temp);
 }
 
 void morreu_philosopher(t_mutex *temp)
 {
+	pthread_mutex_lock(&(temp->die_mutex));
 	printf("%d is died\n",temp->id_philosopher);
 	pthread_exit(NULL);
-	exit (0);
+	//encerrar_thread(temp);
+	//pthread_mutex_unlock(&(temp->die_mutex));
 }
 
 void *teste(void *arg)
@@ -173,9 +175,11 @@ void create_lista(t_geral **geral, int num,char **av)
 	t_geral *temp;
 	t_geral *ultimo;
 	t_mutex *mutex;
+	pthread_mutex_t die_mutex;
 
 	ultimo = NULL;
 	i = 1;
+	pthread_mutex_init(&die_mutex,NULL);
 	while(i <= num)
 	{
 		temp = malloc(sizeof(t_geral));
@@ -191,6 +195,7 @@ void create_lista(t_geral **geral, int num,char **av)
 			mutex = temp->mutex;
 		temp->mutex->first_mutex = mutex;
 		temp->next = NULL;
+		temp->mutex->die_mutex = die_mutex;
 		adicionar_na_lista(geral,temp,&ultimo);
 		//pthread_create(&(temp->mutex->thread),NULL
 		//	,&teste,temp->mutex);

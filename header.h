@@ -19,6 +19,7 @@ typedef struct d_mutex
 	int time_to_die_reset;
 	int max;
 	pthread_mutex_t mutex;
+	pthread_mutex_t die_mutex;
 	pthread_t thread;
 	struct d_mutex *first_mutex;
 }	t_mutex;
@@ -28,7 +29,5 @@ typedef struct d_geral
 	t_mutex *mutex;
 	struct d_geral *next;
 }	t_geral;
-
-long int calculo(struct timeval time_start, struct timeval time_end);
 
 #endif
