@@ -92,9 +92,9 @@ void morreu_philosopher(t_mutex *temp)
 {
 	pthread_mutex_lock(&(temp->die_mutex));
 	printf("%d is died\n",temp->id_philosopher);
-	pthread_exit(NULL);
 	//encerrar_thread(temp);
-	//pthread_mutex_unlock(&(temp->die_mutex));
+	pthread_mutex_unlock(&(temp->die_mutex));
+	pthread_exit(NULL);
 }
 
 void *teste(void *arg)
