@@ -18,10 +18,10 @@ int main(int ac, char **av)
 	t_geral *geral;
 
 	geral = NULL;
-	if(ac != 5)
+	if(ac != 5 && ac != 6)
 		exit_erro();
 	num = atoi(av[1]);
-	create_lista(&geral,num,av);
+	create_lista(&geral,num,av,ac);
 	create_threads(&geral);
 	join_threads(&geral);
 	destroy_all_mutex(&geral);

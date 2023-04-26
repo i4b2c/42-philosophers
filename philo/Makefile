@@ -39,6 +39,7 @@ SRCS =	src/add_list.c		\
 		src/exit.c			\
 		src/init.c			\
 		src/extra.c			\
+		src/die_or_won.c	\
 
 #ARQUIVOS .o
 OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))

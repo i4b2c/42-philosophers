@@ -14,8 +14,9 @@
 
 void exit_erro(void)
 {
-	printf("./philo number_of_philosophers ");
-	printf("time_to_die time_to_eat time_to_sleep\n");
+	printf("number_of_philosophers  ");
+	printf("time_to_die  time_to_eat  time_to_sleep  ");
+	printf("[number_of_times_each_philosopher_must_eat]\n");
 	exit (0);
 }
 
