@@ -50,7 +50,7 @@ MAIN = $(SRC_DIR)/main.c
 #COMANDOS
 CC = cc
 AR = ar rcs
-RM = rm
+RM = rm -f
 MKDIR = mkdir -p
 
 #FLAGS
@@ -76,6 +76,8 @@ fclean: clean
 	@echo $(VERMELHO)"Removendo executavel philo"$(BRANCO) "\t[" $(VERDE)"✔"$(BRANCO) "]" $(RESETAR)
 	@$(RM) $(NAME)
 	@$(RM) -rf $(OBJ_DIR)
+
+re: fclean all
 
 git:
 	git add *

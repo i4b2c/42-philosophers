@@ -17,6 +17,7 @@ int main(int ac, char **av)
 	int num;
 	t_geral *geral;
 
+	geral = malloc(sizeof(t_geral));
 	geral = NULL;
 	if(ac != 5 && ac != 6)
 		exit_erro();
@@ -25,5 +26,6 @@ int main(int ac, char **av)
 	create_threads(&geral);
 	join_threads(&geral);
 	destroy_all_mutex(&geral);
+	free(geral);
 	return 0;
 }

@@ -13,6 +13,7 @@
 
 typedef struct d_mutex
 {
+	int ac;
 	int time_to_sleep;
 	int time_to_die;
 	int time_to_eat;
@@ -28,6 +29,7 @@ typedef struct d_mutex
 	pthread_mutex_t *print;
 	pthread_t thread;
 	struct d_mutex *first_mutex;
+	struct d_geral **inicio;
 }	t_mutex;
 
 typedef struct d_geral
@@ -39,6 +41,7 @@ typedef struct d_geral
 //EXTRA//
 int ft_atoi(const char *string);
 
+int check_eat_philosophers(t_mutex *temp);
 long int calculo(struct timeval s,struct timeval e);
 void adicionar_na_lista(t_geral **g,t_geral *t,t_geral **u);
 void create_threads(t_geral **geral);

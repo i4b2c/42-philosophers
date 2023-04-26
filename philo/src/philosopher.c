@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 03:25:04 by marvin            #+#    #+#             */
-/*   Updated: 2023/04/26 06:44:09 by marvin           ###   ########.fr       */
+/*   Updated: 2023/04/26 07:13:10 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void pensar(t_mutex *temp,struct timeval time_start)
 	gettimeofday(&time_end,NULL);
 	num_temp = calculo(time_start,time_end);
 	pthread_mutex_lock(temp->print);
-	printf("%ld the %d is thinking\n"
+	printf("%ld %d is thinking\n"
 		,num_temp,temp->id_philosopher);
 	pthread_mutex_unlock(temp->print);
 	temp->time_to_die -= temp->time_to_think;
@@ -59,7 +59,7 @@ void comer(t_mutex *temp,t_mutex *mutex
 		,num_temp,temp->id_philosopher);
 	pthread_mutex_unlock(temp->print);
 	temp->eat_times++;
-	if(temp->eat_times == temp->eat_times_max)
+	if(check_eat_philosophers(temp) && temp->ac == 6)
 	{
 		pthread_mutex_unlock(&(temp->mutex));
 		pthread_mutex_unlock(&(mutex->mutex));

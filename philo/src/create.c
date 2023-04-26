@@ -37,13 +37,17 @@ void create_lista(t_geral **geral, int num,char **av,int ac)
 		else
 			temp->mutex->id_s = 1;
 		temp->mutex->max = ft_atoi(av[1]);
+		temp->mutex->ac = ac;
 		temp->mutex->time_to_die = ft_atoi(av[2]);
 		temp->mutex->time_to_die_reset = ft_atoi(av[2]);
 		temp->mutex->time_to_eat = ft_atoi(av[3]);
 		temp->mutex->time_to_sleep = ft_atoi(av[4]);
 		temp->mutex->time_to_think = ft_atoi(av[2])-ft_atoi(av[3])-ft_atoi(av[4]);
+		temp->mutex->inicio = geral;
 		if(ac == 6)
 			temp->mutex->eat_times_max = ft_atoi(av[5]);
+		else
+			temp->mutex->eat_times_max = -1;
 		temp->mutex->eat_times = 0;
 		temp->mutex->id_philosopher = i;
 		iniciar_mutex(temp);
