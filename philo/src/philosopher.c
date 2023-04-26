@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 03:25:04 by marvin            #+#    #+#             */
-/*   Updated: 2023/04/26 09:40:02 by marvin           ###   ########.fr       */
+/*   Updated: 2023/04/26 09:57:45 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,5 +120,5 @@ void *philosopher(void *arg)
 		if(temp->mutex->end)
 			break ;
 	}
-	pthread_exit(NULL);
+	return NULL;
 }
