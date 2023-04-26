@@ -26,7 +26,7 @@ void	get_info_lista(t_geral *temp, char **av, int ac, int i)
 	temp->mutex->time_to_sleep = ft_atoi(av[4]);
 	temp->mutex->time_to_think = ft_atoi(av[2])
 		- ft_atoi(av[3]) - ft_atoi(av[4]);
-	if(temp->mutex->time_to_think < 0)
+	if (temp->mutex->time_to_think < 0)
 		temp->mutex->time_to_think = 0;
 	temp->mutex->end = 0;
 	temp->mutex->eat_times = 0;
