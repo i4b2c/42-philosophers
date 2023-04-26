@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <stdbool.h>
 #include <sys/time.h>
 
 typedef struct d_mutex
@@ -18,6 +19,7 @@ typedef struct d_mutex
 	int time_to_think;
 	int id_philosopher;
 	int time_to_die_reset;
+	int id_s;
 	int max;
 	pthread_mutex_t mutex;
 	pthread_mutex_t *die_mutex;
@@ -43,7 +45,7 @@ void exit_erro(void);
 void destroy_all_mutex(t_geral **geral);
 void join_threads(t_geral **geral);
 void *philosopher(void *arg);
-void morreu_philosopher(t_mutex *temp);
+void morreu_philosopher(t_mutex *temp,struct timeval start);
 void dormir(t_mutex *temp,struct timeval time_start);
 void comer(t_mutex *t,t_mutex *m,struct timeval e);
 void iniciar_mutex(t_geral *temp);

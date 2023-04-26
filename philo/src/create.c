@@ -31,6 +31,10 @@ void create_lista(t_geral **geral, int num,char **av)
 	{
 		temp = malloc(sizeof(t_geral));
 		temp->mutex = malloc(sizeof(t_mutex));
+		if(i % 2)
+			temp->mutex->id_s = 0;
+		else
+			temp->mutex->id_s = 1;
 		temp->mutex->max = ft_atoi(av[1]);
 		temp->mutex->time_to_die = ft_atoi(av[2]);
 		temp->mutex->time_to_die_reset = ft_atoi(av[2]);
