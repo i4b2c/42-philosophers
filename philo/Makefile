@@ -1,9 +1,27 @@
-.PHONY: all clean fclena
+.PHONY: all clean fclean
 
 #CORES
-VERDE = "\033[32m"
-VERMELHO = "\033[31m"
-RESETAR = "\033[0m"
+RESETAR		=		"\033[0m"
+BRANCO		=		"\033[1m"
+PRETO		=		"\033[30m"
+VERMELHO	=		"\033[31m"
+VERDE		=		"\033[32m"
+AMARELO		=		"\033[33m"
+AZUL		=		"\033[34m"
+ROXO		=		"\033[35m"
+CIANO		=		"\033[36m"
+CINZA		=		"\033[37m"
+
+#CORES BACKGROUND
+BRANCO_BACK		=		"\033[7m"
+PRETO_BACK		=		"\033[40m"
+VERMELHO_BACK	=		"\033[41m"
+VERDE_BACK		=		"\033[42m"
+AMARELO_BACK	=		"\033[43m"
+AZUL_BACK		=		"\033[44m"
+ROXO_BACK		=		"\033[45m"
+CIANO_BACK		=		"\033[46m"
+CINZA_BACK		=		"\033[47m"
 
 #EXECUTAVEIS
 NAME = philo
@@ -11,12 +29,15 @@ NAME_A = philo.a
 
 #DIRETORIOS
 SRC_DIR = src
-OBJ_DIR = obj
+OBJ_DIR = .obj
 
 #ARQUIVOS
-SRCS =	src/add_lista.c \
-		src/philosopher.c \
-		src/time.c \
+SRCS =	src/add_list.c		\
+		src/philosopher.c	\
+		src/time.c			\
+		src/create.c		\
+		src/exit.c			\
+		src/init.c			\
 
 #ARQUIVOS .o
 OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
@@ -37,12 +58,12 @@ OUTPUT = -o
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	@echo $(VERDE)"Criando executavel"$(RESETAR)
+	@echo $(VERDE)"Criando executavel ➔  philo"$(RESETAR)
 	@$(CC) $(MAIN) $(OBJS) $(FLAGS) $(OUTPUT) $(NAME)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@$(MKDIR) $(OBJ_DIR)
-	@echo $(VERDE)"Compilando [" $(<:src/%=%)" ]" $(RESETAR)
+	@echo $(AMARELO)"Compilando " $(<:src/%=%) $(AMARELO) "\t[" $(VERDE)"✔"$(AMARELO) "]" $(RESETAR)
 	@$(CC) -c $< -o $@
 
 clean:

@@ -1,22 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time.c                                             :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/26 03:25:09 by marvin            #+#    #+#             */
-/*   Updated: 2023/04/26 03:25:09 by marvin           ###   ########.fr       */
+/*   Created: 2023/04/26 03:25:21 by marvin            #+#    #+#             */
+/*   Updated: 2023/04/26 03:25:21 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosopher.h"
 
-long int calculo(struct timeval time_start, struct timeval time_end)
+void exit_erro(void)
 {
-	long int temp;
+	printf("./philo number_of_philosophers ");
+	printf("time_to_die time_to_eat time_to_sleep\n");
+	exit (0);
+}
 
-	temp = ((time_end.tv_sec * 1000 + time_end.tv_usec / 1000) -
-    		(time_start.tv_sec * 1000 + time_start.tv_usec / 1000));
-	return temp;
+void destroy_all_mutex(t_geral **geral)
+{
+	t_geral *temp;
+
+	temp = *geral;
+	while(temp != NULL)
+	{
+		pthread_mutex_destroy(&(temp->mutex->mutex));
+		temp = temp->next;
+	}
 }

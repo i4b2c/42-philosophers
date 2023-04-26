@@ -1,22 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time.c                                             :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/26 03:25:09 by marvin            #+#    #+#             */
-/*   Updated: 2023/04/26 03:25:09 by marvin           ###   ########.fr       */
+/*   Created: 2023/04/26 03:25:17 by marvin            #+#    #+#             */
+/*   Updated: 2023/04/26 03:25:17 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosopher.h"
 
-long int calculo(struct timeval time_start, struct timeval time_end)
+void iniciar_mutex(t_geral *temp)
 {
-	long int temp;
+	pthread_mutex_t mutex;
+	temp->mutex->mutex = mutex;
+	pthread_mutex_init(&(temp->mutex->mutex),NULL);
+}
 
-	temp = ((time_end.tv_sec * 1000 + time_end.tv_usec / 1000) -
-    		(time_start.tv_sec * 1000 + time_start.tv_usec / 1000));
-	return temp;
+void join_threads(t_geral **geral)
+{
+	t_geral *temp;
+
+	temp = *geral;
+	while(temp != NULL)
+	{
+		pthread_join(temp->mutex->thread,NULL);
+		temp = temp->next;
+	}
 }

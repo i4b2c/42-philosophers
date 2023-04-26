@@ -1,22 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time.c                                             :+:      :+:    :+:   */
+/*   add_list.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/26 03:25:09 by marvin            #+#    #+#             */
-/*   Updated: 2023/04/26 03:25:09 by marvin           ###   ########.fr       */
+/*   Created: 2023/04/26 03:25:36 by marvin            #+#    #+#             */
+/*   Updated: 2023/04/26 03:25:36 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosopher.h"
 
-long int calculo(struct timeval time_start, struct timeval time_end)
+void adicionar_na_lista(t_geral **g,t_geral *t,t_geral **u)
 {
-	long int temp;
-
-	temp = ((time_end.tv_sec * 1000 + time_end.tv_usec / 1000) -
-    		(time_start.tv_sec * 1000 + time_start.tv_usec / 1000));
-	return temp;
+	if(*g == NULL)
+	{
+		*g = t;
+		*u = *g;
+	}
+	else
+	{
+		(*u)->next = t;
+		*u = t;
+	}
 }
