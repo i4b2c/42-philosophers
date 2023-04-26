@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 03:25:04 by marvin            #+#    #+#             */
-/*   Updated: 2023/04/26 07:13:10 by marvin           ###   ########.fr       */
+/*   Updated: 2023/04/26 08:25:34 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ void pensar(t_mutex *temp,struct timeval time_start)
 		,num_temp,temp->id_philosopher);
 	pthread_mutex_unlock(temp->print);
 	temp->time_to_die -= temp->time_to_think;
+	if(temp->time_to_die < 0)
+		morreu_philosopher(temp,time_start);
 	usleep(temp->time_to_think*1000);
 }
 
@@ -41,11 +43,11 @@ void comer(t_mutex *temp,t_mutex *mutex
 	gettimeofday(&temp1,NULL);
 	pthread_mutex_lock(&(temp->mutex));
 	pthread_mutex_lock(&(mutex->mutex));
-	gettimeofday(&time_end,NULL);
 	gettimeofday(&temp2,NULL);
-	i = calculo(temp1,temp2);
+	gettimeofday(&time_end,NULL);
+	i = calculo(temp1,temp2)/5;
 	num_temp = calculo(time_start,time_end);
-	if(i < 10)
+	if(i <= 10)
 		i = 0;
 	temp->time_to_die -= temp->time_to_eat + i;
 	if(temp->time_to_die < 0)
@@ -59,6 +61,7 @@ void comer(t_mutex *temp,t_mutex *mutex
 		,num_temp,temp->id_philosopher);
 	pthread_mutex_unlock(temp->print);
 	temp->eat_times++;
+	temp->time_to_die = temp->time_to_die_reset;
 	if(check_eat_philosophers(temp) && temp->ac == 6)
 	{
 		pthread_mutex_unlock(&(temp->mutex));
@@ -66,7 +69,6 @@ void comer(t_mutex *temp,t_mutex *mutex
 		ganhou_philosopher(temp,time_start);
 	}
 	usleep(temp->time_to_eat*1000);
-	temp->time_to_die = temp->time_to_die_reset;
 	pthread_mutex_unlock(&(temp->mutex));
 	pthread_mutex_unlock(&(mutex->mutex));
 }
@@ -110,6 +112,8 @@ void *philosopher(void *arg)
 			comer(temp->mutex,
 				temp->mutex->first_mutex,time_start);
 		dormir(temp->mutex,time_start);
+		if(temp->mutex->time_to_die <= 0)
+			morreu_philosopher(temp->mutex,time_start);
 		temp->mutex->id_s = 0;
 	}
 	pthread_exit(NULL);
