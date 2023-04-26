@@ -58,7 +58,7 @@ OUTPUT = -o
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	@echo $(VERDE)"Criando executavel ➔  philo"$(RESETAR)
+	@echo $(VERDE)"Criando executavel philo" $(BRANCO) "\t[" $(VERDE)"✔"$(BRANCO) "]" $(RESETAR)
 	@$(CC) $(MAIN) $(OBJS) $(FLAGS) $(OUTPUT) $(NAME)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
@@ -67,11 +67,11 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@$(CC) -c $< -o $@
 
 clean:
-	@echo $(VERMELHO)"Removendo arquivo .o"$(RESETAR)
+	@echo $(VERMELHO)"Removendo objetos\t" $(BRANCO) "\t[" $(VERDE)"✔"$(BRANCO) "]" $(RESETAR)
 	@$(RM) $(OBJ_DIR)/*.o
 
 fclean: clean
-	@echo $(VERMELHO)"Removendo executavel"$(RESETAR)
+	@echo $(VERMELHO)"Removendo executavel philo"$(BRANCO) "\t[" $(VERDE)"✔"$(BRANCO) "]" $(RESETAR)
 	@$(RM) $(NAME)
 	@$(RM) -rf $(OBJ_DIR)
 
