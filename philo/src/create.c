@@ -44,6 +44,7 @@ void create_lista(t_geral **geral, int num,char **av,int ac)
 		temp->mutex->time_to_sleep = ft_atoi(av[4]);
 		temp->mutex->time_to_think = ft_atoi(av[2])-ft_atoi(av[3])-ft_atoi(av[4]);
 		temp->mutex->inicio = geral;
+		temp->mutex->end = 0;
 		if(ac == 6)
 			temp->mutex->eat_times_max = ft_atoi(av[5]);
 		else
@@ -71,6 +72,7 @@ void create_threads(t_geral **geral)
 	{
 		pthread_create(&(temp_geral->mutex->thread),NULL
 			,&philosopher,temp_geral);
+		//pthread_detach(temp_geral->mutex->thread);
 		temp_geral = temp_geral->next;
 	}
 }

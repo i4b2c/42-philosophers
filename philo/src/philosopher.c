@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 03:25:04 by marvin            #+#    #+#             */
-/*   Updated: 2023/04/26 08:25:34 by marvin           ###   ########.fr       */
+/*   Updated: 2023/04/26 09:40:02 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void pensar(t_mutex *temp,struct timeval time_start)
 	gettimeofday(&time_end,NULL);
 	num_temp = calculo(time_start,time_end);
 	pthread_mutex_lock(temp->print);
-	printf("%ld %d is thinking\n"
+	printf("%ld\t %d is thinking\n"
 		,num_temp,temp->id_philosopher);
 	pthread_mutex_unlock(temp->print);
 	temp->time_to_die -= temp->time_to_think;
@@ -57,7 +57,7 @@ void comer(t_mutex *temp,t_mutex *mutex
 		morreu_philosopher(temp,time_start);
 	}
 	pthread_mutex_lock(temp->print);
-	printf("%ld %d is eating\n"
+	printf("%ld\t %d is eating\n"
 		,num_temp,temp->id_philosopher);
 	pthread_mutex_unlock(temp->print);
 	temp->eat_times++;
@@ -81,7 +81,7 @@ void dormir(t_mutex *temp,struct timeval time_start)
 	gettimeofday(&time_end,NULL);
 	num_temp = calculo(time_start,time_end);
 	pthread_mutex_lock(temp->print);
-	printf("%ld %d is sleeping\n"
+	printf("%ld\t %d is sleeping\n"
 		,num_temp,temp->id_philosopher);
 	pthread_mutex_unlock(temp->print);
 	temp->time_to_die -= temp->time_to_sleep;
@@ -111,10 +111,14 @@ void *philosopher(void *arg)
 		else
 			comer(temp->mutex,
 				temp->mutex->first_mutex,time_start);
+		if(temp->mutex->end)
+			break ;
 		dormir(temp->mutex,time_start);
 		if(temp->mutex->time_to_die <= 0)
 			morreu_philosopher(temp->mutex,time_start);
 		temp->mutex->id_s = 0;
+		if(temp->mutex->end)
+			break ;
 	}
 	pthread_exit(NULL);
 }

@@ -43,3 +43,35 @@ int check_eat_philosophers(t_mutex *temp)
 	}
 	return 1;
 }
+
+void close_everything(t_geral **temp)
+{
+	t_geral *geral;
+	t_geral *temp_freeg;
+	t_mutex *temp_free;
+	int i;
+
+	i = 0;
+	geral = *temp;
+	while(geral != NULL)
+	{
+		if(i)
+		{
+			free(temp_free);
+			free(temp_freeg);
+		}
+		else
+		{
+			free((geral->mutex->die_mutex));
+			free((geral->mutex->print));
+		}
+		temp_free = geral->mutex;
+		temp_freeg = geral;
+		geral = geral->next;
+		i++;
+	}
+	free(temp_free);
+	free(temp_freeg);
+	free(geral);
+	return ;
+}

@@ -22,6 +22,7 @@ typedef struct d_mutex
 	int time_to_die_reset;
 	int eat_times;
 	int eat_times_max;
+	int end;
 	int id_s;
 	int max;
 	pthread_mutex_t mutex;
@@ -41,6 +42,7 @@ typedef struct d_geral
 //EXTRA//
 int ft_atoi(const char *string);
 
+void close_everything(t_geral **temp);
 int check_eat_philosophers(t_mutex *temp);
 long int calculo(struct timeval s,struct timeval e);
 void adicionar_na_lista(t_geral **g,t_geral *t,t_geral **u);

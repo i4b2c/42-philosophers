@@ -21,9 +21,21 @@ void morreu_philosopher(t_mutex *temp,struct timeval start)
 	num = calculo(start,end);
 	pthread_mutex_lock(temp->print);
 	pthread_mutex_lock((temp->die_mutex));
-	printf("%ld %d is died\n",num,temp->id_philosopher);
+	printf("%ld\t %d is died\n",num,temp->id_philosopher);
 	//pthread_exit(NULL);
 	exit (0);
+}
+
+void end_thread(t_mutex *temp)
+{
+	t_geral *geral;
+
+	geral = *temp->inicio;
+	while(geral != NULL)
+	{
+		geral->mutex->end = 1;
+		geral = geral->next;
+	}
 }
 
 void ganhou_philosopher(t_mutex *temp,struct timeval start)
@@ -35,8 +47,12 @@ void ganhou_philosopher(t_mutex *temp,struct timeval start)
 	num = calculo(start,end);
 	pthread_mutex_lock(temp->print);
 	pthread_mutex_lock((temp->die_mutex));
-	printf("%ld every philosopher eat at least %d meals\n"
+	printf("%ld\t every philosopher eat at least %d meals\n"
 		,num,temp->eat_times_max);
-	//pthread_exit(NULL);
-	exit (0);
+	end_thread(temp);
+	//close_everything(temp);
+	pthread_mutex_unlock(temp->print);
+	pthread_mutex_unlock(temp->die_mutex);
+	return ;
+	//exit (0);
 }
