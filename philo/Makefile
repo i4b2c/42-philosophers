@@ -2,7 +2,7 @@
 
 #CORES
 RESETAR		=		"\033[0m"
-BRANCO		=		"\033[1m"
+BRANCO		=		"\033[1;37m"
 PRETO		=		"\033[30m"
 VERMELHO	=		"\033[31m"
 VERDE		=		"\033[32m"
@@ -63,7 +63,7 @@ $(NAME): $(OBJS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@$(MKDIR) $(OBJ_DIR)
-	@echo $(AMARELO)"Compilando " $(<:src/%=%) $(AMARELO) "\t[" $(VERDE)"✔"$(AMARELO) "]" $(RESETAR)
+	@echo $(AMARELO)"Compilando     " $(<:src/%=%) $(BRANCO) "\t[" $(VERDE)"✔"$(BRANCO) "]" $(RESETAR)
 	@$(CC) -c $< -o $@
 
 clean:
