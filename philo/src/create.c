@@ -12,67 +12,74 @@
 
 #include "../include/philosopher.h"
 
-void create_lista(t_geral **geral, int num,char **av,int ac)
+void	get_info_lista(t_geral *temp, char **av, int ac, int i)
 {
-	int i;
-	t_geral *temp;
-	t_geral *ultimo;
-	t_mutex *mutex;
-	pthread_mutex_t *die_mutex;
-	pthread_mutex_t *print;
+	if (!(i % 2))
+		temp->mutex->id_s = 0;
+	else
+		temp->mutex->id_s = 1;
+	temp->mutex->max = ft_atoi(av[1]);
+	temp->mutex->ac = ac;
+	temp->mutex->time_to_die = ft_atoi(av[2]);
+	temp->mutex->time_to_die_reset = ft_atoi(av[2]);
+	temp->mutex->time_to_eat = ft_atoi(av[3]);
+	temp->mutex->time_to_sleep = ft_atoi(av[4]);
+	temp->mutex->time_to_think = ft_atoi(av[2])
+		- ft_atoi(av[3]) - ft_atoi(av[4]);
+	temp->mutex->end = 0;
+	temp->mutex->eat_times = 0;
+	temp->mutex->id_philosopher = i;
+	if (ac == 6)
+		temp->mutex->eat_times_max = ft_atoi(av[5]);
+	else
+		temp->mutex->eat_times_max = -1;
+}
 
-	die_mutex = malloc(sizeof(pthread_mutex_t));
-	print = malloc(sizeof(pthread_mutex_t));
+void	start_lista(pthread_mutex_t **d, pthread_mutex_t **p, t_geral **u)
+{
+	*d = malloc(sizeof(pthread_mutex_t));
+	*p = malloc(sizeof(pthread_mutex_t));
+	*u = NULL;
+	pthread_mutex_init(*d, NULL);
+	pthread_mutex_init(*p, NULL);
+}
 
-	ultimo = NULL;
-	i = 1;
-	pthread_mutex_init(die_mutex,NULL);
-	pthread_mutex_init(print,NULL);
-	while(i <= num)
+void	create_lista(t_geral **geral, int i, char **av, int ac)
+{
+	t_geral			*temp;
+	t_geral			*ultimo;
+	t_mutex			*mutex;
+	pthread_mutex_t	*die_mutex;
+	pthread_mutex_t	*print;
+
+	start_lista(&die_mutex, &print, &ultimo);
+	while (i <= ft_atoi(av[1]))
 	{
 		temp = malloc(sizeof(t_geral));
 		temp->mutex = malloc(sizeof(t_mutex));
-		if(!(i % 2))
-			temp->mutex->id_s = 0;
-		else
-			temp->mutex->id_s = 1;
-		temp->mutex->max = ft_atoi(av[1]);
-		temp->mutex->ac = ac;
-		temp->mutex->time_to_die = ft_atoi(av[2]);
-		temp->mutex->time_to_die_reset = ft_atoi(av[2]);
-		temp->mutex->time_to_eat = ft_atoi(av[3]);
-		temp->mutex->time_to_sleep = ft_atoi(av[4]);
-		temp->mutex->time_to_think = ft_atoi(av[2])-ft_atoi(av[3])-ft_atoi(av[4]);
+		get_info_lista(temp, av, ac, i);
 		temp->mutex->inicio = geral;
-		temp->mutex->end = 0;
-		if(ac == 6)
-			temp->mutex->eat_times_max = ft_atoi(av[5]);
-		else
-			temp->mutex->eat_times_max = -1;
-		temp->mutex->eat_times = 0;
-		temp->mutex->id_philosopher = i;
 		iniciar_mutex(temp);
-		if(i == 1)
+		if (i == 1)
 			mutex = temp->mutex;
 		temp->mutex->first_mutex = mutex;
 		temp->next = NULL;
 		temp->mutex->die_mutex = die_mutex;
 		temp->mutex->print = print;
-		adicionar_na_lista(geral,temp,&ultimo);
+		adicionar_na_lista(geral, temp, &ultimo);
 		i++;
 	}
 }
 
-void create_threads(t_geral **geral)
+void	create_threads(t_geral **geral)
 {
-	t_geral *temp_geral;
+	t_geral	*temp_geral;
 
 	temp_geral = *geral;
-	while(temp_geral != NULL)
+	while (temp_geral != NULL)
 	{
-		pthread_create(&(temp_geral->mutex->thread),NULL
-			,&philosopher,temp_geral);
-		//pthread_detach(temp_geral->mutex->thread);
+		pthread_create(&(temp_geral->mutex->thread), NULL,
+			&philosopher, temp_geral);
 		temp_geral = temp_geral->next;
 	}
 }

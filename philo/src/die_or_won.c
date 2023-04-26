@@ -12,46 +12,44 @@
 
 #include "../include/philosopher.h"
 
-void morreu_philosopher(t_mutex *temp,struct timeval start)
+void	morreu_philosopher(t_mutex *temp, struct timeval start)
 {
-	struct timeval end;
-	long int num;
+	struct timeval	end;
+	long int		num;
 
-	gettimeofday(&end,NULL);
-	num = calculo(start,end);
+	gettimeofday(&end, NULL);
+	num = calculo(start, end);
 	pthread_mutex_lock(temp->print);
 	pthread_mutex_lock((temp->die_mutex));
-	printf("%ld\t %d is died\n",num,temp->id_philosopher);
+	printf("%ld\t %d is died\n", num, temp->id_philosopher);
 	exit (0);
 }
 
-void end_thread(t_mutex *temp)
+void	end_thread(t_mutex *temp)
 {
-	t_geral *geral;
+	t_geral	*geral;
 
 	geral = *temp->inicio;
-	while(geral != NULL)
+	while (geral != NULL)
 	{
 		geral->mutex->end = 1;
 		geral = geral->next;
 	}
 }
 
-void ganhou_philosopher(t_mutex *temp,struct timeval start)
+void	ganhou_philosopher(t_mutex *temp, struct timeval start)
 {
-	struct timeval end;
-	long int num;
+	struct timeval	end;
+	long int		num;
 
-	gettimeofday(&end,NULL);
-	num = calculo(start,end);
+	gettimeofday(&end, NULL);
+	num = calculo(start, end);
 	pthread_mutex_lock(temp->print);
 	pthread_mutex_lock((temp->die_mutex));
-	printf("%ld\t every philosopher eat at least %d meals\n"
-		,num,temp->eat_times_max);
+	printf("%ld\t every philosopher eat at least %d meals\n",
+		num, temp->eat_times_max);
 	end_thread(temp);
-	//close_everything(temp);
 	pthread_mutex_unlock(temp->print);
 	pthread_mutex_unlock(temp->die_mutex);
 	return ;
-	//exit (0);
 }
