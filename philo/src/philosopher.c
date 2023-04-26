@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 03:25:04 by marvin            #+#    #+#             */
-/*   Updated: 2023/04/26 10:45:44 by marvin           ###   ########.fr       */
+/*   Updated: 2023/04/26 17:50:09 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,13 @@ void	comer(t_mutex *temp, t_mutex *mutex,
 	long int		i;
 	struct timeval	time_end;
 	struct timeval	temp1;
-	struct timeval	temp2;
 
 	num_temp = calculo(time_start, time_end);
 	gettimeofday(&temp1, NULL);
 	pthread_mutex_lock(&(temp->mutex));
 	pthread_mutex_lock(&(mutex->mutex));
-	gettimeofday(&temp2, NULL);
 	gettimeofday(&time_end, NULL);
-	i = calculo(temp1, temp2) / 5;
+	i = calculo(temp1, time_end) / 5;
 	num_temp = calculo(time_start, time_end);
 	if (i <= 10)
 		i = 0;
