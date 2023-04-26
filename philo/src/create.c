@@ -31,11 +31,12 @@ void create_lista(t_geral **geral, int num,char **av)
 	{
 		temp = malloc(sizeof(t_geral));
 		temp->mutex = malloc(sizeof(t_mutex));
-		temp->mutex->max = atoi(av[1]);
-		temp->mutex->time_to_die = atoi(av[2]);
-		temp->mutex->time_to_die_reset = atoi(av[2]);
-		temp->mutex->time_to_eat = atoi(av[3]);
-		temp->mutex->time_to_sleep = atoi(av[4]);
+		temp->mutex->max = ft_atoi(av[1]);
+		temp->mutex->time_to_die = ft_atoi(av[2]);
+		temp->mutex->time_to_die_reset = ft_atoi(av[2]);
+		temp->mutex->time_to_eat = ft_atoi(av[3]);
+		temp->mutex->time_to_sleep = ft_atoi(av[4]);
+		temp->mutex->time_to_think = ft_atoi(av[2])-ft_atoi(av[3])-ft_atoi(av[4]);
 		temp->mutex->id_philosopher = i;
 		iniciar_mutex(temp);
 		if(i == 1)

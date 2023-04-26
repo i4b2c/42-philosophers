@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   philosopher.h                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/26 03:25:48 by marvin            #+#    #+#             */
-/*   Updated: 2023/04/26 03:25:49 by marvin           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef HEADER_H
 #define HEADER_H
 
@@ -27,6 +15,7 @@ typedef struct d_mutex
 	int time_to_sleep;
 	int time_to_die;
 	int time_to_eat;
+	int time_to_think;
 	int id_philosopher;
 	int time_to_die_reset;
 	int max;
@@ -42,6 +31,9 @@ typedef struct d_geral
 	t_mutex *mutex;
 	struct d_geral *next;
 }	t_geral;
+
+//EXTRA//
+int ft_atoi(const char *string);
 
 long int calculo(struct timeval s,struct timeval e);
 void adicionar_na_lista(t_geral **g,t_geral *t,t_geral **u);
