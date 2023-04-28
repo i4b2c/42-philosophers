@@ -20,8 +20,9 @@ void	pensar(t_mutex *temp, struct timeval time_start)
 	gettimeofday(&time_end, NULL);
 	num_temp = calculo(time_start, time_end);
 	pthread_mutex_lock(temp->print);
-	printf("%ld\t %d is thinking\n",
-		num_temp, temp->id_philosopher);
+	if(!temp->end)
+		printf("%ld\t %d is thinking\n",
+			num_temp, temp->id_philosopher);
 	pthread_mutex_unlock(temp->print);
 	temp->time_to_die -= temp->time_to_think;
 	if (temp->time_to_die < 0)
@@ -54,8 +55,9 @@ void	comer(t_mutex *temp, t_mutex *mutex,
 		morreu_philosopher(temp, time_start);
 	}
 	pthread_mutex_lock(temp->print);
-	printf("%ld\t %d is eating\n",
-		num_temp, temp->id_philosopher);
+	if(!temp->end)
+		printf("%ld\t %d is eating\n",
+			num_temp, temp->id_philosopher);
 	pthread_mutex_unlock(temp->print);
 	temp->eat_times++;
 	temp->time_to_die = temp->time_to_die_reset;
@@ -78,8 +80,9 @@ void	dormir(t_mutex *temp, struct timeval time_start)
 	gettimeofday(&time_end, NULL);
 	num_temp = calculo(time_start, time_end);
 	pthread_mutex_lock(temp->print);
-	printf("%ld\t %d is sleeping\n",
-		num_temp, temp->id_philosopher);
+	if(!temp->end)
+		printf("%ld\t %d is sleeping\n",
+			num_temp, temp->id_philosopher);
 	pthread_mutex_unlock(temp->print);
 	temp->time_to_die -= temp->time_to_sleep;
 	usleep(temp->time_to_sleep * 1000);
