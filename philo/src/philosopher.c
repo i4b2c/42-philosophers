@@ -3,51 +3,55 @@
 /*                                                        :::      ::::::::   */
 /*   philosopher.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: icaldas <icaldas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 03:25:04 by marvin            #+#    #+#             */
-/*   Updated: 2023/04/26 17:50:09 by marvin           ###   ########.fr       */
+/*   Updated: 2023/04/28 14:06:15 by icaldas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosopher.h"
 
+void	print_fork(struct timeval time_start, t_mutex *temp)
+{
+	pthread_mutex_lock((temp->print));
+	if(!temp->end)
+		printf("%ld\t %d has taken a fork\n"
+			,get_p_time(time_start),temp->id_philosopher);
+	pthread_mutex_unlock((temp->print));
+}
+
 void	pensar(t_mutex *temp, struct timeval time_start)
 {
-	long int		num_temp;
+	//long int		num_temp;
 	struct timeval	time_end;
 
 	gettimeofday(&time_end, NULL);
-	num_temp = calculo(time_start, time_end);
+	//num_temp = calculo(time_start, time_end);
 	pthread_mutex_lock(temp->print);
 	if(!temp->end)
 		printf("%ld\t %d is thinking\n",
-			num_temp, temp->id_philosopher);
+			get_p_time(time_start), temp->id_philosopher);
 	pthread_mutex_unlock(temp->print);
-	temp->time_to_die -= temp->time_to_think;
 	if (temp->time_to_die < 0)
 		morreu_philosopher(temp, time_start);
-	usleep(temp->time_to_think * 1000);
+	ft_usleep(temp->time_to_think);
 }
 
 void	comer(t_mutex *temp, t_mutex *mutex,
 	struct timeval time_start)
 {
-	long int		num_temp;
 	long int		i;
 	struct timeval	time_end;
 	struct timeval	temp1;
 
-	num_temp = calculo(time_start, time_end);
 	gettimeofday(&temp1, NULL);
 	pthread_mutex_lock(&(temp->mutex));
+	print_fork(time_start, temp);
 	pthread_mutex_lock(&(mutex->mutex));
+	print_fork(time_start, temp);
 	gettimeofday(&time_end, NULL);
-	i = calculo(temp1, time_end) / 5;
-	num_temp = calculo(time_start, time_end);
-	if (i <= 10)
-		i = 0;
-	temp->time_to_die -= temp->time_to_eat + i;
+	i = calculo(temp1,time_end);
 	if (temp->time_to_die < 0)
 	{
 		pthread_mutex_unlock(&(temp->mutex));
@@ -57,7 +61,7 @@ void	comer(t_mutex *temp, t_mutex *mutex,
 	pthread_mutex_lock(temp->print);
 	if(!temp->end)
 		printf("%ld\t %d is eating\n",
-			num_temp, temp->id_philosopher);
+			get_p_time(time_start), temp->id_philosopher);
 	pthread_mutex_unlock(temp->print);
 	temp->eat_times++;
 	temp->time_to_die = temp->time_to_die_reset;
@@ -67,7 +71,7 @@ void	comer(t_mutex *temp, t_mutex *mutex,
 		pthread_mutex_unlock(&(mutex->mutex));
 		ganhou_philosopher(temp, time_start);
 	}
-	usleep(temp->time_to_eat * 1000);
+	ft_usleep(temp->time_to_eat);
 	pthread_mutex_unlock(&(temp->mutex));
 	pthread_mutex_unlock(&(mutex->mutex));
 }
@@ -84,8 +88,7 @@ void	dormir(t_mutex *temp, struct timeval time_start)
 		printf("%ld\t %d is sleeping\n",
 			num_temp, temp->id_philosopher);
 	pthread_mutex_unlock(temp->print);
-	temp->time_to_die -= temp->time_to_sleep;
-	usleep(temp->time_to_sleep * 1000);
+	ft_usleep(temp->time_to_sleep);
 	if (temp->time_to_die < 0)
 		morreu_philosopher(temp, time_start);
 }
@@ -100,7 +103,7 @@ void	*philosopher(void *arg)
 
 	i = 0;
 	temp = (t_geral *)arg;
-	gettimeofday(&time_start, NULL);
+	time_start = temp->mutex->time_start;
 	while (1)
 	{
 		if (temp->mutex->id_s == 0)
@@ -111,8 +114,6 @@ void	*philosopher(void *arg)
 		else
 			comer(temp->mutex,
 				temp->mutex->first_mutex, time_start);
-		if (temp->mutex->end)
-			break ;
 		dormir(temp->mutex, time_start);
 		if (temp->mutex->time_to_die <= 0)
 			morreu_philosopher(temp->mutex, time_start);

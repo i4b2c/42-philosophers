@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosopher.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: icaldas <icaldas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 10:07:20 by marvin            #+#    #+#             */
-/*   Updated: 2023/04/26 10:27:46 by marvin           ###   ########.fr       */
+/*   Updated: 2023/04/28 14:05:13 by icaldas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct d_mutex
 	pthread_t		thread;
 	struct d_mutex	*first_mutex;
 	struct d_geral	**inicio;
+	struct timeval time_start;
 }					t_mutex;
 
 typedef struct d_geral
@@ -99,6 +100,9 @@ void		*philosopher(void *arg);
 /************\
 |**--TIME--**|
 \************/
+long int	get_p_time(struct timeval time_start);
+long int	get_time(void);
+void		ft_usleep(int time);
 long int	calculo(struct timeval s, struct timeval e);
 
 #endif

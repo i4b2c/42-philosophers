@@ -12,8 +12,11 @@
 
 #include "../include/philosopher.h"
 
-void	get_info_lista(t_geral *temp, char **av, int ac, int i)
+void	get_info_lista(t_geral *temp, char **av, int ac, int i
+	,struct timeval time_start)
 {
+	//struct timeval time_start;
+
 	if (!(i % 2))
 		temp->mutex->id_s = 0;
 	else
@@ -31,6 +34,7 @@ void	get_info_lista(t_geral *temp, char **av, int ac, int i)
 	temp->mutex->end = 0;
 	temp->mutex->eat_times = 0;
 	temp->mutex->id_philosopher = i;
+	temp->mutex->time_start = time_start;
 	if (ac == 6)
 		temp->mutex->eat_times_max = ft_atoi(av[5]);
 	else
@@ -53,13 +57,15 @@ void	create_lista(t_geral **geral, int i, char **av, int ac)
 	t_mutex			*mutex;
 	pthread_mutex_t	*die_mutex;
 	pthread_mutex_t	*print;
+	struct timeval time_start;
 
 	start_lista(&die_mutex, &print, &ultimo);
+	gettimeofday(&time_start,NULL);
 	while (i <= ft_atoi(av[1]))
 	{
 		temp = malloc(sizeof(t_geral));
 		temp->mutex = malloc(sizeof(t_mutex));
-		get_info_lista(temp, av, ac, i);
+		get_info_lista(temp, av, ac, i,time_start);
 		temp->mutex->inicio = geral;
 		iniciar_mutex(temp);
 		if (i == 1)
