@@ -22,7 +22,8 @@ void	morreu_philosopher(t_mutex *temp, struct timeval start)
 	pthread_mutex_lock(temp->print);
 	pthread_mutex_lock((temp->die_mutex));
 	if(!temp->end)
-		printf("%ld\t %d is died\n", num, temp->id_philosopher);
+		printf("%ld\t %d is died\n",
+		get_p_time(start) , temp->id_philosopher);
 	end_thread(temp);
 	pthread_mutex_unlock(temp->print);
 	pthread_mutex_unlock((temp->die_mutex));

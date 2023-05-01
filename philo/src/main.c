@@ -20,11 +20,12 @@ long int less_time_philosophers(t_geral **geral)
 	struct timeval time_end;
 
 	temp = *geral;
-	//tempo que demora para fazer isso
 	gettimeofday(&time_start,NULL);
 	while(temp != NULL)
 	{
+		pthread_mutex_lock(&temp->mutex->add);
 		temp->mutex->time_to_die--;
+		pthread_mutex_unlock(&temp->mutex->add);
 		temp = temp->next;
 	}
 	gettimeofday(&time_end,NULL);
@@ -60,15 +61,22 @@ void *teste(void *arg)
 	t_geral **temp;
 	long int num ;
 	struct timeval time_start;
+	long int start_teste,end_teste;
+
 
 	gettimeofday(&time_start,NULL);
 	temp = (t_geral **)(arg);
 	while(1)
 	{
-		num = less_time_philosophers(temp);
+		start_teste = get_time();
+		less_time_philosophers(temp);
+		end_teste = get_time();
 		if(no_time_philosophers(temp))
 			break ;
-		usleep((1-num)*1000);
+		num = end_teste - start_teste;
+		//ft_usleep(1);
+		//usleep(num);
+		usleep(1000 - num);
 	}
 }
 
@@ -81,10 +89,10 @@ int	main(int ac, char **av)
 	if (ac != 5 && ac != 6)
 		exit_erro();
 	create_lista(&geral, 1, av, ac);
-	create_threads(&geral);
 	pthread_create(&life,NULL,&teste,&geral);
-	join_threads(&geral);
+	create_threads(&geral);
 	pthread_join(life,NULL);
+	join_threads(&geral,&life);
 	destroy_all_mutex(&geral);
 	close_everything(&geral);
 	return (0);

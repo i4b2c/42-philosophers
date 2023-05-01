@@ -3,15 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   philosopher.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icaldas <icaldas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 10:07:20 by marvin            #+#    #+#             */
-/*   Updated: 2023/04/28 14:05:13 by icaldas          ###   ########.fr       */
+/*   Updated: 2023/05/01 06:15:38 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILOSOPHER_H
 # define PHILOSOPHER_H
+
+#define M t_mutex
+#define G t_geral
+#define TM struct timeval
 
 # include <stddef.h>
 # include <time.h>
@@ -40,6 +44,7 @@ typedef struct d_mutex
 	pthread_mutex_t	mutex;
 	pthread_mutex_t	*die_mutex;
 	pthread_mutex_t	*print;
+	pthread_mutex_t add;
 	pthread_t		thread;
 	struct d_mutex	*first_mutex;
 	struct d_geral	**inicio;
@@ -51,6 +56,7 @@ typedef struct d_geral
 	t_mutex			*mutex;
 	struct d_geral	*next;
 }					t_geral;
+
 
 /****************\
 |**--ADD_LIST--**|
@@ -87,7 +93,7 @@ int			ft_atoi(const char *string);
 |**--INIT--**|
 \************/
 void		iniciar_mutex(t_geral *temp);
-void		join_threads(t_geral **geral);
+void		join_threads(t_geral **geral,pthread_t *mutex);
 
 /********************\
 |**--PHILOSOPHERS--**|
@@ -100,6 +106,7 @@ void		*philosopher(void *arg);
 /************\
 |**--TIME--**|
 \************/
+void		ft_usleep_micro(float time);
 long int	get_p_time(struct timeval time_start);
 long int	get_time(void);
 void		ft_usleep(int time);

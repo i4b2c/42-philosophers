@@ -41,6 +41,16 @@ void	ft_usleep(int time)
 		usleep(10);
 }
 
+void	ft_usleep_micro(float time)
+{
+	printf("time : %f\n",time);
+	long int temp;
+
+	temp = get_time();
+	while((float)(get_time()) < (float)(temp + (time)))
+		usleep(10);
+}
+
 long int	calculo(struct timeval time_start, struct timeval time_end)
 {
 	long int	temp;

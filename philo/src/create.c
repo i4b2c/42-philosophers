@@ -15,8 +15,6 @@
 void	get_info_lista(t_geral *temp, char **av, int ac, int i
 	,struct timeval time_start)
 {
-	//struct timeval time_start;
-
 	if (!(i % 2))
 		temp->mutex->id_s = 0;
 	else
@@ -28,7 +26,7 @@ void	get_info_lista(t_geral *temp, char **av, int ac, int i
 	temp->mutex->time_to_eat = ft_atoi(av[3]);
 	temp->mutex->time_to_sleep = ft_atoi(av[4]);
 	temp->mutex->time_to_think = ft_atoi(av[2])
-		- ft_atoi(av[3]) - ft_atoi(av[4]);
+		- (ft_atoi(av[3]) + ft_atoi(av[4]));
 	if (temp->mutex->time_to_think < 0)
 		temp->mutex->time_to_think = 0;
 	temp->mutex->end = 0;
