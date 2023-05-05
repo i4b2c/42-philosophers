@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 10:07:20 by marvin            #+#    #+#             */
-/*   Updated: 2023/05/01 06:15:38 by marvin           ###   ########.fr       */
+/*   Updated: 2023/05/05 18:53:07 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,8 @@ void		join_threads(t_geral **geral,pthread_t *mutex);
 /********************\
 |**--PHILOSOPHERS--**|
 \********************/
-void		pensar(t_mutex *temp, struct timeval start);
+void		pensar_init(t_mutex *temp, struct timeval start);
+void		pensar(t_mutex *temp, long int temp1 , long int temp2,struct timeval time_start);
 void		dormir(t_mutex *temp, struct timeval time_start);
 void		comer(t_mutex *t, t_mutex *m, struct timeval e);
 void		*philosopher(void *arg);

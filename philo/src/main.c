@@ -12,6 +12,15 @@
 
 #include "../include/philosopher.h"
 
+void	ft_usleep1(int time)
+{
+	long int temp;
+
+	temp = get_time();
+	while(get_time() <= temp + time)
+		usleep(100);
+}
+
 long int less_time_philosophers(t_geral **geral)
 {
 	t_geral *temp;
@@ -71,12 +80,11 @@ void *teste(void *arg)
 		start_teste = get_time();
 		less_time_philosophers(temp);
 		end_teste = get_time();
+		num = end_teste - start_teste;
+		ft_usleep(1);
+		//usleep(1000 - num);
 		if(no_time_philosophers(temp))
 			break ;
-		num = end_teste - start_teste;
-		//ft_usleep(1);
-		//usleep(num);
-		usleep(1000 - num);
 	}
 }
 
