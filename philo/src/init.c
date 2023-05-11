@@ -15,7 +15,7 @@
 void	iniciar_mutex(t_geral *temp)
 {
 	pthread_mutex_t	mutex;
-	pthread_mutex_t add;
+	pthread_mutex_t	add;
 
 	temp->mutex->mutex = mutex;
 	temp->mutex->add = add;
@@ -23,7 +23,7 @@ void	iniciar_mutex(t_geral *temp)
 	pthread_mutex_init(&(temp->mutex->add), NULL);
 }
 
-void	join_threads(t_geral **geral,pthread_t *mutex)
+void	join_threads(t_geral **geral, pthread_t *mutex)
 {
 	t_geral	*temp;
 
@@ -33,5 +33,4 @@ void	join_threads(t_geral **geral,pthread_t *mutex)
 		pthread_join(temp->mutex->thread, NULL);
 		temp = temp->next;
 	}
-	//pthread_join(*mutex,NULL);
 }

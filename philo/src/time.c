@@ -12,42 +12,32 @@
 
 #include "../include/philosopher.h"
 
-long int get_p_time(struct timeval time_start)
+long int	get_p_time(struct timeval time_start)
 {
-	long int temp;
-	long int temp2;
+	long int	temp;
+	long int	temp2;
 
-	temp2 = ((time_start.tv_sec*1000)+(time_start.tv_usec/1000));
+	temp2 = ((time_start.tv_sec * 1000) + (time_start.tv_usec / 1000));
 	temp = get_time();
-	return (temp-temp2);
+	return (temp - temp2);
 }
 
 long int	get_time(void)
 {
 	struct timeval	time_start;
-	long int	temp;
+	long int		temp;
 
-	gettimeofday(&time_start,NULL);
+	gettimeofday(&time_start, NULL);
 	temp = ((time_start.tv_sec * 1000) + (time_start.tv_usec / 1000));
 	return (temp);
 }
 
 void	ft_usleep(int time)
 {
-	long int temp;
+	long int	temp;
 
 	temp = get_time();
-	while(get_time() < temp + time)
-		usleep(10);
-}
-
-void	ft_usleep_micro(float time)
-{
-	printf("time : %f\n",time);
-	long int temp;
-
-	temp = get_time();
-	while((float)(get_time()) < (float)(temp + (time)))
+	while (get_time() < temp + time)
 		usleep(10);
 }
 

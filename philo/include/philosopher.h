@@ -6,16 +6,12 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 10:07:20 by marvin            #+#    #+#             */
-/*   Updated: 2023/05/05 18:53:07 by marvin           ###   ########.fr       */
+/*   Updated: 2023/05/11 19:58:37 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILOSOPHER_H
 # define PHILOSOPHER_H
-
-#define M t_mutex
-#define G t_geral
-#define TM struct timeval
 
 # include <stddef.h>
 # include <time.h>
@@ -44,11 +40,11 @@ typedef struct d_mutex
 	pthread_mutex_t	mutex;
 	pthread_mutex_t	*die_mutex;
 	pthread_mutex_t	*print;
-	pthread_mutex_t add;
+	pthread_mutex_t	add;
 	pthread_t		thread;
 	struct d_mutex	*first_mutex;
 	struct d_geral	**inicio;
-	struct timeval time_start;
+	struct timeval	time_start;
 }					t_mutex;
 
 typedef struct d_geral
@@ -57,15 +53,12 @@ typedef struct d_geral
 	struct d_geral	*next;
 }					t_geral;
 
-
-/****************\
-|**--ADD_LIST--**|
-\****************/
-void		adicionar_na_lista(t_geral **g, t_geral *t, t_geral **u);
-
 /**************\
 |**--CREATE--**|
 \**************/
+void		adicionar_na_lista(t_geral **g, t_geral *t);
+void		get_info_lista(t_geral *temp, char **av, int ac, int i);
+void		start_lista(pthread_mutex_t **d, pthread_mutex_t **p);
 void		create_lista(t_geral **geral, int num, char **av, int ac);
 void		create_threads(t_geral **geral);
 
@@ -81,6 +74,7 @@ void		ganhou_philosopher(t_mutex *temp, struct timeval start);
 \************/
 void		exit_erro(void);
 void		destroy_all_mutex(t_geral **geral);
+void		free_lista(int i, t_geral *g, t_mutex *mutex, t_geral *geral);
 int			check_eat_philosophers(t_mutex *temp);
 void		close_everything(t_geral **temp);
 
@@ -88,18 +82,27 @@ void		close_everything(t_geral **temp);
 |**--EXTRA--**|
 \*************/
 int			ft_atoi(const char *string);
+void		print_fork(struct timeval time_start, t_mutex *temp);
+void		print_action(long num, int philo, int op);
 
 /************\
 |**--INIT--**|
 \************/
 void		iniciar_mutex(t_geral *temp);
-void		join_threads(t_geral **geral,pthread_t *mutex);
+void		join_threads(t_geral **geral, pthread_t *mutex);
+
+/************\
+|**--LIFE--**|
+\************/
+long int	less_time_philosophers(t_geral **geral);
+int			no_time_philosophers(t_geral **geral);
+void		*life_philosopher(void *arg);
 
 /********************\
 |**--PHILOSOPHERS--**|
 \********************/
 void		pensar_init(t_mutex *temp, struct timeval start);
-void		pensar(t_mutex *temp, long int temp1 , long int temp2,struct timeval time_start);
+void		pensar(t_mutex *temp, long int temp1, struct timeval time_start);
 void		dormir(t_mutex *temp, struct timeval time_start);
 void		comer(t_mutex *t, t_mutex *m, struct timeval e);
 void		*philosopher(void *arg);
@@ -107,7 +110,6 @@ void		*philosopher(void *arg);
 /************\
 |**--TIME--**|
 \************/
-void		ft_usleep_micro(float time);
 long int	get_p_time(struct timeval time_start);
 long int	get_time(void);
 void		ft_usleep(int time);

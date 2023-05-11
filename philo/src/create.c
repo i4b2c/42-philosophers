@@ -12,8 +12,22 @@
 
 #include "../include/philosopher.h"
 
-void	get_info_lista(t_geral *temp, char **av, int ac, int i
-	,struct timeval time_start)
+void	adicionar_na_lista(t_geral **g, t_geral *t)
+{
+	t_geral	*new;
+
+	if (!(*g))
+	{
+		*g = t;
+		return ;
+	}
+	new = *g;
+	while (new->next != NULL)
+		new = new->next;
+	new->next = t;
+}
+
+void	get_info_lista(t_geral *temp, char **av, int ac, int i)
 {
 	if (!(i % 2))
 		temp->mutex->id_s = 0;
@@ -32,18 +46,16 @@ void	get_info_lista(t_geral *temp, char **av, int ac, int i
 	temp->mutex->end = 0;
 	temp->mutex->eat_times = 0;
 	temp->mutex->id_philosopher = i;
-	temp->mutex->time_start = time_start;
 	if (ac == 6)
 		temp->mutex->eat_times_max = ft_atoi(av[5]);
 	else
 		temp->mutex->eat_times_max = -1;
 }
 
-void	start_lista(pthread_mutex_t **d, pthread_mutex_t **p, t_geral **u)
+void	start_lista(pthread_mutex_t **d, pthread_mutex_t **p)
 {
 	*d = malloc(sizeof(pthread_mutex_t));
 	*p = malloc(sizeof(pthread_mutex_t));
-	*u = NULL;
 	pthread_mutex_init(*d, NULL);
 	pthread_mutex_init(*p, NULL);
 }
@@ -51,19 +63,19 @@ void	start_lista(pthread_mutex_t **d, pthread_mutex_t **p, t_geral **u)
 void	create_lista(t_geral **geral, int i, char **av, int ac)
 {
 	t_geral			*temp;
-	t_geral			*ultimo;
 	t_mutex			*mutex;
 	pthread_mutex_t	*die_mutex;
 	pthread_mutex_t	*print;
-	struct timeval time_start;
+	struct timeval	time_start;
 
-	start_lista(&die_mutex, &print, &ultimo);
-	gettimeofday(&time_start,NULL);
+	start_lista(&die_mutex, &print);
+	gettimeofday(&time_start, NULL);
 	while (i <= ft_atoi(av[1]))
 	{
 		temp = malloc(sizeof(t_geral));
 		temp->mutex = malloc(sizeof(t_mutex));
-		get_info_lista(temp, av, ac, i,time_start);
+		temp->mutex->time_start = time_start;
+		get_info_lista(temp, av, ac, i);
 		temp->mutex->inicio = geral;
 		iniciar_mutex(temp);
 		if (i == 1)
@@ -72,7 +84,7 @@ void	create_lista(t_geral **geral, int i, char **av, int ac)
 		temp->next = NULL;
 		temp->mutex->die_mutex = die_mutex;
 		temp->mutex->print = print;
-		adicionar_na_lista(geral, temp, &ultimo);
+		adicionar_na_lista(geral, temp);
 		i++;
 	}
 }

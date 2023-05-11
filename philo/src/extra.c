@@ -39,3 +39,24 @@ int	ft_atoi(const char *string)
 	}
 	return (res * x);
 }
+
+void	print_fork(struct timeval time_start, t_mutex *temp)
+{
+	pthread_mutex_lock((temp->print));
+	if (!temp->end)
+		print_action(get_p_time(time_start), temp->id_philosopher, 3);
+	pthread_mutex_unlock((temp->print));
+}
+
+void	print_action(long num, int philo, int op)
+{
+	const char	*options[5] = {
+		"is sleeping",
+		"is eating",
+		"is thiking",
+		"has taken a fork",
+		"is dead"
+	};
+
+	printf("%ld\t %d %s\n", num, philo, options[op]);
+}
