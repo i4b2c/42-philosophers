@@ -32,10 +32,9 @@ SRC_DIR = src
 OBJ_DIR = .obj
 
 #ARQUIVOS
-SRCS =	src/add_list.c		\
-		src/philosopher.c	\
-		src/time.c			\
+SRCS =	src/philosopher.c	\
 		src/create.c		\
+		src/time.c			\
 		src/exit.c			\
 		src/init.c			\
 		src/extra.c			\
