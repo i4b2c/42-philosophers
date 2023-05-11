@@ -74,7 +74,7 @@ void *teste(void *arg)
 			break ;
 		end_teste = get_time();
 		num = end_teste - start_teste;
-		usleep(1000 - num);
+		ft_usleep(1);
 	}
 }
 
