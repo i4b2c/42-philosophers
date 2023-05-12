@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 10:07:20 by marvin            #+#    #+#             */
-/*   Updated: 2023/05/11 19:58:37 by marvin           ###   ########.fr       */
+/*   Updated: 2023/05/12 14:09:22 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void		ganhou_philosopher(t_mutex *temp, struct timeval start);
 void		exit_erro(void);
 void		destroy_all_mutex(t_geral **geral);
 void		free_lista(int i, t_geral *g, t_mutex *mutex, t_geral *geral);
-int			check_eat_philosophers(t_mutex *temp);
+int			check_eat_philosophers(t_geral **temp);
 void		close_everything(t_geral **temp);
 
 /*************\
@@ -114,5 +114,10 @@ long int	get_p_time(struct timeval time_start);
 long int	get_time(void);
 void		ft_usleep(int time);
 long int	calculo(struct timeval s, struct timeval e);
+
+/************\
+|**--ERRO--**|
+\************/
+int			check_error(char **av, int ac);
 
 #endif

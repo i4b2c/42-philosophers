@@ -32,14 +32,14 @@ void	destroy_all_mutex(t_geral **geral)
 	}
 }
 
-int	check_eat_philosophers(t_mutex *temp)
+int	check_eat_philosophers(t_geral **temp)
 {
 	t_geral	*geral;
 
-	geral = *(temp->inicio);
+	geral = *temp;
 	while (geral != NULL)
 	{
-		if (geral->mutex->eat_times <= temp->eat_times_max)
+		if (geral->mutex->eat_times <= geral->mutex->eat_times_max)
 			return (0);
 		geral = geral->next;
 	}

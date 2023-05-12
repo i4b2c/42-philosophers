@@ -20,6 +20,11 @@ int	main(int ac, char **av)
 	geral = NULL;
 	if (ac != 5 && ac != 6)
 		exit_erro();
+	if (check_error(av, ac))
+	{
+		write(2, "Error\n", 6);
+		return (-1);
+	}
 	create_lista(&geral, 1, av, ac);
 	pthread_create(&life, NULL,
 		&life_philosopher, &geral);
