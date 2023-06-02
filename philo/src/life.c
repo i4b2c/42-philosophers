@@ -76,4 +76,5 @@ void	*life_philosopher(void *arg)
 		}
 		ft_usleep(1);
 	}
+	return (NULL);
 }
