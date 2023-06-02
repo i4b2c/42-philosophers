@@ -33,4 +33,5 @@ void	join_threads(t_geral **geral, pthread_t *mutex)
 		pthread_join(temp->mutex->thread, NULL);
 		temp = temp->next;
 	}
+	pthread_join(*mutex, NULL);
 }

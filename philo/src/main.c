@@ -30,7 +30,6 @@ int	main(int ac, char **av)
 	pthread_create(&life, NULL,
 		&life_philosopher, &geral);
 	join_threads(&geral, &life);
-	pthread_join(life, NULL);
 	destroy_all_mutex(&geral);
 	close_everything(&geral);
 	return (0);
