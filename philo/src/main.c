@@ -26,11 +26,11 @@ int	main(int ac, char **av)
 		return (-1);
 	}
 	create_lista(&geral, 1, av, ac);
+	create_threads(&geral);
 	pthread_create(&life, NULL,
 		&life_philosopher, &geral);
-	create_threads(&geral);
-	pthread_join(life, NULL);
 	join_threads(&geral, &life);
+	pthread_join(life, NULL);
 	destroy_all_mutex(&geral);
 	close_everything(&geral);
 	return (0);

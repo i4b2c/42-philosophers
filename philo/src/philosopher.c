@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosopher.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: icaldas <icaldas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 03:25:04 by marvin            #+#    #+#             */
-/*   Updated: 2023/05/11 19:49:01 by marvin           ###   ########.fr       */
+/*   Updated: 2023/06/02 12:09:36 by icaldas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,11 @@ void	pensar(t_mutex *temp, long int temp1,
 	long int	temp2;
 
 	temp2 = get_time();
-	num = temp2 - temp1;
-	num /= 1000;
-	if (num >= 10)
-	{
-		pthread_mutex_lock(temp->print);
-		if (!temp->end)
-			print_action(get_p_time(time_start), temp->id_philosopher, 2);
-		pthread_mutex_unlock(temp->print);
-		ft_usleep(num);
-	}
+	pthread_mutex_lock(temp->print);
+	if (!temp->end)
+		print_action(get_p_time(time_start), temp->id_philosopher, 2);
+	pthread_mutex_unlock(temp->print);
+	ft_usleep(temp->time_to_think);
 }
 
 void	comer(t_mutex *temp, t_mutex *mutex,
@@ -57,7 +52,6 @@ void	comer(t_mutex *temp, t_mutex *mutex,
 	{
 		pthread_mutex_lock(&(mutex->mutex));
 		print_fork(time_start, temp);
-		pensar(temp, temp1, time_start);
 		pthread_mutex_lock(temp->print);
 		if (!temp->end)
 			print_action(get_p_time(time_start), temp->id_philosopher, 1);
@@ -94,7 +88,6 @@ void	*philosopher(void *arg)
 {
 	int				i;
 	struct timeval	time_start;
-	long int		num;
 	pthread_mutex_t	*mutex_next;
 	t_geral			*temp;
 
@@ -103,7 +96,7 @@ void	*philosopher(void *arg)
 	time_start = temp->mutex->time_start;
 	while (1)
 	{
-		if (temp->mutex->id_s == 0)
+		if (temp->mutex->id_s == 1)
 			pensar_init(temp->mutex, time_start);
 		if (temp->mutex->id_philosopher < temp->mutex->max)
 			comer(temp->mutex,

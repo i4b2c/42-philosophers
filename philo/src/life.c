@@ -37,16 +37,14 @@ int	no_time_philosophers(t_geral **geral)
 {
 	t_geral			*temp;
 	struct timeval	time_start;
-	struct timeval	time_end;
-	long int		num;
 
 	temp = *geral;
 	time_start = temp->mutex->time_start;
 	while (temp != NULL)
 	{
-		if (temp->mutex->end && temp->mutex->time_to_die < 0)
+		if (temp->mutex->end && temp->mutex->time_to_die < -1)
 			return (1);
-		if (temp->mutex->time_to_die < 0)
+		if (temp->mutex->time_to_die < -1)
 		{
 			morreu_philosopher(temp->mutex, time_start);
 			return (1);
@@ -61,6 +59,7 @@ void	*life_philosopher(void *arg)
 	t_geral			**temp;
 	long int		num ;
 	struct timeval	time_start;
+	long			temp_num;
 
 	gettimeofday(&time_start, NULL);
 	temp = (t_geral **)(arg);
