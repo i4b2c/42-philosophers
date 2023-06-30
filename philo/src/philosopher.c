@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosopher.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icaldas <icaldas@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 03:25:04 by marvin            #+#    #+#             */
-/*   Updated: 2023/06/02 12:09:36 by icaldas          ###   ########.fr       */
+/*   Updated: 2023/06/30 20:52:32 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ void	pensar_init(t_mutex *temp, struct timeval time_start)
 	if (!temp->end)
 		print_action(get_p_time(time_start), temp->id_philosopher, 2);
 	pthread_mutex_unlock(temp->print);
-	if (temp->time_to_die < 0)
-		morreu_philosopher(temp, time_start);
 	ft_usleep(temp->time_to_think);
 }
 
@@ -46,26 +44,58 @@ void	comer(t_mutex *temp, t_mutex *mutex,
 	long int	temp1;
 
 	temp1 = get_time();
-	pthread_mutex_lock(&(temp->mutex));
-	print_fork(time_start, temp);
-	if (temp->max > 1)
+	if(temp->id_philosopher % 2 == 0)
+	{
+			pthread_mutex_lock(&(temp->mutex));
+		print_fork(time_start, temp);
+		if (temp->max > 1)
+		{
+			pthread_mutex_lock(&(mutex->mutex));
+			print_fork(time_start, temp);
+			pthread_mutex_lock(temp->print);
+			if (!temp->end)
+				print_action(get_p_time(time_start), temp->id_philosopher, 1);
+			pthread_mutex_unlock(temp->print);
+			pthread_mutex_lock(&temp->add);
+			temp->time_to_die = temp->time_to_die_reset;
+			pthread_mutex_unlock(&temp->add);
+			ft_usleep(temp->time_to_eat);
+			pthread_mutex_unlock(&(temp->mutex));
+			pthread_mutex_unlock(&(mutex->mutex));
+			temp->eat_times++;
+		}
+		else
+		{
+			pthread_mutex_unlock(&(temp->mutex));
+			usleep(temp->time_to_die * 2000);
+		}
+	}
+	else
 	{
 		pthread_mutex_lock(&(mutex->mutex));
 		print_fork(time_start, temp);
-		pthread_mutex_lock(temp->print);
-		if (!temp->end)
-			print_action(get_p_time(time_start), temp->id_philosopher, 1);
-		pthread_mutex_unlock(temp->print);
-		pthread_mutex_lock(&temp->add);
-		temp->time_to_die = temp->time_to_die_reset;
-		pthread_mutex_unlock(&temp->add);
-		ft_usleep(temp->time_to_eat);
-		temp->eat_times++;
-		pthread_mutex_unlock(&(temp->mutex));
-		pthread_mutex_unlock(&(mutex->mutex));
+		if (temp->max > 1)
+		{
+			pthread_mutex_lock(&(temp->mutex));
+			print_fork(time_start, temp);
+			pthread_mutex_lock(temp->print);
+			if (!temp->end)
+				print_action(get_p_time(time_start), temp->id_philosopher, 1);
+			pthread_mutex_unlock(temp->print);
+			pthread_mutex_lock(&temp->add);
+			temp->time_to_die = temp->time_to_die_reset;
+			pthread_mutex_unlock(&temp->add);
+			ft_usleep(temp->time_to_eat);
+			pthread_mutex_unlock(&(mutex->mutex));
+			pthread_mutex_unlock(&(temp->mutex));
+			temp->eat_times++;
+		}
+		else
+		{
+			pthread_mutex_unlock(&(mutex->mutex));
+			usleep(temp->time_to_die * 2000);
+		}
 	}
-	else
-		usleep(temp->time_to_die * 2000);
 }
 
 void	dormir(t_mutex *temp, struct timeval time_start)

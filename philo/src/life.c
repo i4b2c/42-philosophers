@@ -42,9 +42,9 @@ int	no_time_philosophers(t_geral **geral)
 	time_start = temp->mutex->time_start;
 	while (temp != NULL)
 	{
-		if (temp->mutex->end && temp->mutex->time_to_die < -1)
+		if (temp->mutex->end && temp->mutex->time_to_die < 0)
 			return (1);
-		if (temp->mutex->time_to_die < -1)
+		if (temp->mutex->time_to_die < 0)
 		{
 			morreu_philosopher(temp->mutex, time_start);
 			return (1);
