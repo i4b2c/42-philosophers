@@ -42,9 +42,9 @@ int	no_time_philosophers(t_geral **geral)
 	time_start = temp->mutex->time_start;
 	while (temp != NULL)
 	{
-		if (temp->mutex->end && temp->mutex->time_to_die < 0)
+		if (temp->mutex->end && temp->mutex->time_to_die < -3)
 			return (1);
-		if (temp->mutex->time_to_die < 0)
+		if (temp->mutex->time_to_die < -3)
 		{
 			morreu_philosopher(temp->mutex, time_start);
 			return (1);
@@ -65,7 +65,7 @@ void	*life_philosopher(void *arg)
 	temp = (t_geral **)(arg);
 	while (1)
 	{
-		less_time_philosophers(temp);
+		num = less_time_philosophers(temp);
 		if (no_time_philosophers(temp))
 			break ;
 		if ((*temp)->mutex->ac == 6
@@ -74,6 +74,7 @@ void	*life_philosopher(void *arg)
 			ganhou_philosopher((*temp)->mutex, time_start);
 			break ;
 		}
+		//usleep(1000-(num*6));
 		ft_usleep(1);
 	}
 	return (NULL);
