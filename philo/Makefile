@@ -41,6 +41,7 @@ SRCS =	src/philosopher.c	\
 		src/die_or_won.c	\
 		src/life.c			\
 		src/erro.c			\
+		src/take_fork.c		\
 
 #ARQUIVOS .o
 OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))

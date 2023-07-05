@@ -74,7 +74,6 @@ void	*life_philosopher(void *arg)
 			ganhou_philosopher((*temp)->mutex, time_start);
 			break ;
 		}
-		//usleep(1000-(num*6));
 		ft_usleep(1);
 	}
 	return (NULL);

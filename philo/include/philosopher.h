@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 10:07:20 by marvin            #+#    #+#             */
-/*   Updated: 2023/06/29 15:35:46 by marvin           ###   ########.fr       */
+/*   Updated: 2023/07/05 15:05:44 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,5 +119,11 @@ long int	calculo(struct timeval s, struct timeval e);
 |**--ERRO--**|
 \************/
 int			check_error(char **av, int ac);
+
+/*****************\
+|**--TAKE_FORK--**|
+\*****************/
+void		take_right_first(t_mutex *t, t_mutex *m, struct timeval ts);
+void		take_left_first(t_mutex *t, t_mutex *m, struct timeval ts);
 
 #endif
