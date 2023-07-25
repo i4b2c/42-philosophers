@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosopher.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: icaldas <icaldas@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 03:25:04 by marvin            #+#    #+#             */
-/*   Updated: 2023/07/05 15:04:32 by marvin           ###   ########.fr       */
+/*   Updated: 2023/07/25 12:09:14 by icaldas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,6 @@ void	dormir(t_mutex *temp, struct timeval time_start)
 		print_action(get_p_time(time_start), temp->id_philosopher, 0);
 	pthread_mutex_unlock(temp->print);
 	ft_usleep(temp->time_to_sleep);
-	if (temp->time_to_die < 0)
-		morreu_philosopher(temp, time_start);
 }
 
 void	*philosopher(void *arg)

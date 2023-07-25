@@ -61,7 +61,6 @@ void	*life_philosopher(void *arg)
 	struct timeval	time_start;
 	long			temp_num;
 
-	gettimeofday(&time_start, NULL);
 	temp = (t_geral **)(arg);
 	while (1)
 	{
@@ -71,7 +70,8 @@ void	*life_philosopher(void *arg)
 		if ((*temp)->mutex->ac == 6
 			&& check_eat_philosophers(temp))
 		{
-			ganhou_philosopher((*temp)->mutex, time_start);
+			ganhou_philosopher((*temp)->mutex,
+				(*temp)->mutex->time_start);
 			break ;
 		}
 		ft_usleep(1);
