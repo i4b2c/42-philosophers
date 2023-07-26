@@ -53,7 +53,7 @@ void	print_action(long num, int philo, int op)
 	const char	*options[5] = {
 		"is sleeping",
 		"is eating",
-		"is thiking",
+		"is thinking",
 		"has taken a fork",
 		"is dead"
 	};
