@@ -39,7 +39,7 @@ int	check_eat_philosophers(t_geral **temp)
 	geral = *temp;
 	while (geral != NULL)
 	{
-		if (geral->mutex->eat_times <= geral->mutex->eat_times_max)
+		if (geral->mutex->eat_times < geral->mutex->eat_times_max)
 			return (0);
 		geral = geral->next;
 	}

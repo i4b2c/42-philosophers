@@ -56,7 +56,7 @@ RM = rm -f
 MKDIR = mkdir -p
 
 #FLAGS
-FLAGS = -Werror -Wextra -Wall -lpthread #-fsanitize=thread -g -o3
+FLAGS = -Werror -Wextra -Wall -lpthread -g -o3 #-fsanitize=thread -g -o3
 OUTPUT = -o
 
 all: $(NAME)
