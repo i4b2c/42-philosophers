@@ -12,6 +12,12 @@
 
 #include "../include/philosopher_bonus.h"
 
+void error(void)
+{
+	write(2,"Error\n",6);
+	exit(0);
+}
+
 int	ft_atoi(const char *string)
 {
 	const char	*str;
@@ -58,7 +64,7 @@ void init_philo(t_philo **philo, char **av,int i)
 	if(*philo == NULL)
 	{
 		*philo = temp;
-		return ;
+		//return ;
 	}
 	else
 	{
@@ -71,15 +77,30 @@ void init_philo(t_philo **philo, char **av,int i)
 
 void philosopher(t_philo *philo)
 {
-	while(1)
+	sem_t *sem;
+
+	sem = sem_open("/my_semaphore",O_RDWR);
+	if(sem == SEM_FAILED)
 	{
+		perror("sem_open");
+		return ;
+	}
+	int i = 0;
+	while(i < 10)
+	{
+		sem_wait(sem);
+		sem_wait(sem);
 		printf("%d is eating\n",philo->data->id);
 		usleep(philo->data->time_to_eat * 1000);
+		sem_post(sem);
+		sem_post(sem);
 		printf("%d is sleeping\n",philo->data->id);
 		usleep(philo->data->time_to_sleep * 1000);
 		printf("%d is thinking\n",philo->data->id);
 		usleep(philo->data->time_to_think * 1000);
+		i++;
 	}
+	//exit (0);
 }
 
 void create_philo(t_philo *philo, int max_philo)
@@ -92,36 +113,56 @@ void create_philo(t_philo *philo, int max_philo)
 		philo->data->pid = fork();
 		if(philo->data->pid == (pid_t) 0)
 			philosopher(philo);
-		i++;
 		philo = philo->next;
-		// else
-		// 	waitpid(philo->data->pid,NULL,0);
+		i++;
 	}
-	//waitpid(-1,NULL,0);
+	free(philo);
+	//exit(0);
 }
 
 int main(int ac, char **av)
 {
-	(void)ac;
-
 	int i;
 	pid_t pid;
 	t_philo *philo;
-	philo = NULL;
+	sem_t *sem;
 
+	philo = NULL;
 	i = 0;
 	if(ac != 5)
 		return 1;
-	while(i < ft_atoi(av[1]))
+	sem_unlink("/my_semaphore");
+	sem = sem_open("/my_semaphore", O_CREAT | O_EXCL , 0644 , ft_atoi(av[1]));
+	if(sem == SEM_FAILED)
 	{
-		init_philo(&philo,av,i);
-		i++;
+		perror("sem_open");
+		return 1;
 	}
 	pid = fork();
 	if(pid == (pid_t)0)
+	{
+		i = 0;
+		while(i < ft_atoi(av[1]))
+		{
+			init_philo(&philo,av,i);
+			i++;
+		}
 		create_philo(philo,ft_atoi(av[1]));
+		exit (0);
+	}
 	else
-		waitpid(pid,NULL,0);
+	{
+		i = 0;
+		while(i < ft_atoi(av[1]))
+		{
+			pid_t pid_check;
+			pid_check = waitpid(-1,NULL,WNOHANG);
+			if(pid_check > 0)
+				i++;
+			usleep(1000);
+		}
+	}
+	//funcao para esperar por todos os processos filhos
 	// for(i = 0;i < ft_atoi(av[1]);i++)
 	// {
 	// 	printf("id : %d\n",philo[i].data->id);
