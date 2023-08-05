@@ -47,5 +47,7 @@ int	check_error(char **av, int ac)
 	if (ft_atoi(av[4]) <= 0 || ft_atoi(av[3]) <= 0
 		|| ft_atoi(av[2]) <= 0 || ft_atoi(av[1]) <= 0)
 		ret = 1;
+	if (ac == 6 && ft_atoi(av[5]) <= 0)
+		ret = 1;
 	return (ret);
 }
