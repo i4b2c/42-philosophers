@@ -2,9 +2,7 @@
 
 ## Usage
 
-``cd philo``
-
-``make`` to compile and create the **philo** executable
+``cd philo && make`` to compile and create the **philo** executable
  
 ``./philo number_of_philosophers time_to_die time_to_eat time_to_sleep``
 
